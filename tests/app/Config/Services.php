@@ -19,6 +19,10 @@ use CodeIgniter\Config\BaseService;
  */
 class Services extends BaseService
 {
+	public static function htmlEmail(array $emailConfig=[], bool $getShared=TRUE){
+		return $getShared ? static::getSharedInstance('htmlEmail', $emailConfig) : new \Tomkirsch\HtmlEmail\HtmlEmail($emailConfig);
+	}
+	
 	// public static function example($getShared = true)
 	// {
 	//     if ($getShared)

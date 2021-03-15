@@ -54,6 +54,12 @@ class Home extends BaseController
 			->p('You were sent this email because you stupidly signed up for our mailing list. Deal with it.')
 			->setMessage()
 		;
+		// your normal CI email stuff
+		$htmlEmail
+			->setFrom('me@example.com')
+			->setTo('you@example.com')
+			//->send();
+		;
 		$out = $htmlEmail->compiledHtml;
 		$out = str_replace('</body>', '<pre>'.$htmlEmail->compiledPlain.'</pre></body>', $out);
 		return $out;

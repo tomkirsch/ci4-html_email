@@ -1,5 +1,10 @@
 # ci4-html_email
 
+Composer Install
+```
+composer require tomkirsch/html_email
+```
+
 Add the service to `Config\Services`
 ```
 	public static function htmlEmail(array $emailConfig=[], bool $getShared=TRUE){

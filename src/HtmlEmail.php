@@ -8,8 +8,8 @@ class HtmlEmail{
 	const DIR_H = 'horizontal';
 	
 	const SECTION_PREHEADER = 'preheader';
-	const SECTION_BODY = 'body';
-	const SECTION_FOOTER = 'footer';
+	const SECTION_BODY 		= 'body';
+	const SECTION_FOOTER 	= 'footer';
 	
 	public $colors = [];
 	public $contentHtml = [];
@@ -19,6 +19,7 @@ class HtmlEmail{
 	public $plainSectionGlue = "\n \n"; // characters that separate the preheader/body/footer in plaintext. Set in initialize()
 	public $compiledHtml = ''; // for debugging
 	public $compiledPlain = ''; // debugging
+	public $useFixedEmailLib; // PHP mail() can fail with CI's validation method
 	
 	protected $email; // CI Email library instance
 	protected $title;
@@ -32,7 +33,9 @@ class HtmlEmail{
 	protected $baseStyles = [];
 	
 	public function __construct(array $emailConfig, BaseConfig $config=NULL){
-		$this->email = service('email');
+		$this->useFixedEmailLib = $config->useFixedEmailLib ?? TRUE;
+		$this->email = $this->useFixedEmailLib ? new CiEmailFix() : service('email');
+		
 		$emailConfig = array_merge([
 			'mailType'=>'html',
 		], $emailConfig);

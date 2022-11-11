@@ -37,6 +37,7 @@ class HtmlEmail
 
 	public function __construct(array $emailConfig = [], BaseConfig $config = NULL)
 	{
+		if (!$config) $config = config("Email");
 		$this->useFixedEmailLib = $config->useFixedEmailLib ?? TRUE;
 		$this->email = $this->useFixedEmailLib ? new CiEmailFix() : service('email');
 

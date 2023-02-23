@@ -22,7 +22,6 @@ class HtmlEmail
 	public $plainSectionGlue = "\n \n"; // characters that separate the preheader/body/footer in plaintext. Set in initialize()
 	public $compiledHtml = ''; // for debugging
 	public $compiledPlain = ''; // debugging
-	public $useFixedEmailLib; // PHP mail() can fail with CI's validation method
 
 	protected $email; // CI Email library instance
 	protected $title;
@@ -38,8 +37,7 @@ class HtmlEmail
 	public function __construct(array $emailConfig = [], BaseConfig $config = NULL)
 	{
 		if (!$config) $config = config("Email");
-		$this->useFixedEmailLib = $config->useFixedEmailLib ?? TRUE;
-		$this->email = $this->useFixedEmailLib ? new CiEmailFix() : service('email');
+		$this->email = service('email');
 
 		$emailConfig = array_merge([
 			'mailType' => 'html',
@@ -83,6 +81,12 @@ class HtmlEmail
 		$this->compiledHtml = '';
 		$this->compiledPlain = '';
 		$this->email->clear($clearAttachments);
+
+		/**
+		 * Remove Date in header to prevent this issue (in BlueHost):
+		 * This message has been rejected because it has an overlength date field which can be used to bypass spam filters.
+		 */
+		$this->email->setHeader('Date', ""); // a blank value means it will be excluded from the header string
 		return $this;
 	}
 
